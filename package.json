@@ -6,9 +6,12 @@
   "dependencies": {
     "angular": "^1.5.0",
     "angular-ui-router": "^1.0.0-beta.1",
+    "bluebird": "^3.5.1",
     "browserify-sha3": "^0.0.4",
+    "json-loader": "^0.5.7",
     "normalize.css": "^3.0.3",
     "truffle": "^4.0.6",
+    "truffle-contract": "^3.0.4",
     "truffle-hdwallet-provider": "^0.0.3",
     "web3": "^1.0.0-beta.30"
   },

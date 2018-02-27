@@ -1,9 +1,14 @@
-<navbar></navbar>
-<header>
-  <hero></hero>
-</header>
 <main>
   <div>
     <h1>Found in {{ $ctrl.name }}.html</h1>
+    <h1>Password: {{ $ctrl.randomPassword }}</h1>
+    <h1>Password A: {{ $ctrl.randomPassword|limitTo:10 }}</h1>
+    <h1>Password B: {{ $ctrl.randomPassword |limitTo:20:10}}</h1>
+    <div><input ng-model="$ctrl.destinationAddress" /></div>div>
+
+    <button ng-click="$ctrl.getLocalhost()">clickme</button>
+    <button ng-click="$ctrl.createRandomPassword()">random pass</button>
+    <button ng-click="$ctrl.deployContranct()">deploy</button>
+
   </div>
 </main>
