@@ -1,5 +1,10 @@
-<navbar></navbar>
 <h1>{{ $ctrl.name }}</h1>
 <section>
-  About us.
+  <label>Password A:<input ng-model="$ctrl.passwordA"></label><br>
+  <label>Password B:<input ng-model="$ctrl.passwordB"></label><br>
+  <label>Contract Address:<input ng-model="$ctrl.contractAddress"></label><br>
+  <label>Source Address:<input ng-model="$ctrl.sourceAddress"></label><br>
+  <label>Provider RPC URL:<input ng-model="$ctrl.rpcProviderUrl"></label><br>
+  <div ng-if="$ctrl.success">{{ $ctrl.success }}</div>
+  <button ng-click="$ctrl.withdrawFunds()">withdraw</button>
 </section>

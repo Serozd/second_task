@@ -4,15 +4,20 @@ import * as truffleContract from 'truffle-contract';
 import * as web3 from 'web3';
 
 class HomeController {
-  constructor(HomeService) {
+  constructor($scope, HomeService) {
     "ngInject";
+    this.$scope = $scope;
     this.HomeService = HomeService;
     this.name = 'home';
     this.content = '';
     this.randomPassword = '';
-    this.destinationAddress='';
-    this.availableDays=1;
+    this.sourceAddress = '';
+    this.destinationAddress = '';
+    this.rpcProviderUrl = '';
+    this.lockAmount = 0;
+    this.availableDays = 1;
     this.instance = null;
+    this.instanceAddress = '';
   }
 
   getLocalhost = () => {
@@ -34,25 +39,29 @@ class HomeController {
     web3.providers.HttpProvider.prototype.sendAsync = web3.providers.HttpProvider.prototype.send;
 
     let Remittance = truffleContract.default(contract);
-    var provider = new web3.providers.HttpProvider('http://localhost:7545');
+    var provider = new web3.providers.HttpProvider(this.rpcProviderUrl);
     var Web3 = new web3.default(provider);
     Remittance.setProvider(provider);
-
+    var self = this;
     Remittance.new(
       this.destinationAddress,
       passwordHash,
       this.availableDays,
       {
-        value: 1e18,
-        from: "0x627306090abaB3A6e1400e9345bC60c78a8BEf57",
+        value: this.lockAmount,
+        from: this.sourceAddress,
         gas:612388,
         gasPrice:10000000000
       }).then((instance) => {
-      this.instance = instance;
+        self.$scope.$apply(() => {
+                self.instanceAddress = instance.address;
+                self.instance = instance;
+        });
+
     });
 
 
   }
 }
-HomeController.$inject =['HomeService'];
+HomeController.$inject =['$scope','HomeService'];
 export default HomeController;
