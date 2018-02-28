@@ -1,0 +1,15 @@
+to use  this project run :
+
+$yarn install
+$npx truffle compile
+$yarn start
+
+to lock funds:
+go to home page and provide requred info, click 'random pass' and then 'deploy'
+
+
+to get funds:
+
+go to home page /about and provide required info, click 'withdraw'
+
+
