@@ -1,17 +1,31 @@
 var Remittance = artifacts.require("Remittance");
+var RemittanceFactory = artifacts.require("RemittanceFactory");
 const expectedExceptionPromise = require("./expected_exception_testRPC_and_geth.js");
 const sha3 = require("browserify-sha3");
 
 contract('Remittance', function(accounts) {
     var instance;
     var password = 'mysupersecurepasswordsplitbytwoparts';
+    var factory;
 
     beforeEach(function() {
         var password_hash = (new sha3.SHA3Hash(256)).update(password).digest();
-        return Remittance.new(accounts[1], password_hash, 1,{from: accounts[0], value: web3.toWei(1)}).then(function(contract) {
-            instance = contract;
+        try {
+        return factory.deploy(accounts[1], password_hash, 1,{from: accounts[0], value: web3.toWei(1)}).then(function(contract) {
+            return Remittance.at(contract.logs[0].args['contr']).then(function(contr) {
+                instance = contr;
+            });
         });
+        } catch (err) {
+
+        }
+
     });
+    it("should deploy factory", function () {
+        return RemittanceFactory.new({from: accounts[0]}).then(function(instance){
+            factory = instance;
+        });
+    })
 
 
     it("should have 1 eth balance initially", function() {

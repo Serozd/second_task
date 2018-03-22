@@ -1,5 +1,5 @@
 import * as sha3 from "browserify-sha3";
-import * as contract from '../../../../build/contracts/Remittance.json';
+import * as contract from '../../../../build/contracts/RemittanceFactory.json';
 import * as truffleContract from 'truffle-contract';
 import * as web3 from 'web3';
 
@@ -18,6 +18,7 @@ class HomeController {
     this.availableDays = 1;
     this.instance = null;
     this.instanceAddress = '';
+    this.contractAddress = '';
   }
 
   getLocalhost = () => {
@@ -38,23 +39,25 @@ class HomeController {
     let passwordHash = (new sha3.SHA3Hash(256)).update(this.randomPassword).digest();
     web3.providers.HttpProvider.prototype.sendAsync = web3.providers.HttpProvider.prototype.send;
 
-    let Remittance = truffleContract.default(contract);
+    let RemittanceFactory = truffleContract.default(contract);
     var provider = new web3.providers.HttpProvider(this.rpcProviderUrl);
     var Web3 = new web3.default(provider);
-    Remittance.setProvider(provider);
+    RemittanceFactory.setProvider(provider);
     var self = this;
-    Remittance.new(
-      this.destinationAddress,
-      passwordHash,
-      this.availableDays,
-      {
-        value: this.lockAmount,
-        from: this.sourceAddress,
-        gas:612388,
-        gasPrice:10000000000
+    RemittanceFactory.at(self.contractAddress).then(
+      function(instance) {
+        return instance.deploy(self.destinationAddress,
+            passwordHash,
+            self.availableDays,
+            {
+              value: self.lockAmount,
+              from: self.sourceAddress,
+              gas:812388,
+              gasPrice:10000000000
+            });
       }).then((instance) => {
         self.$scope.$apply(() => {
-                self.instanceAddress = instance.address;
+                self.instanceAddress = instance.logs[0].args['contr'];
                 self.instance = instance;
         });
 

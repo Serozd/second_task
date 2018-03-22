@@ -11,9 +11,9 @@ contract Remittance {
     event FundsUnlocked(address);
     event FundsReverted(address, uint256);
 
-    function Remittance(address rec, bytes32 passwd_hash, uint8 days_available) public payable {
+    function Remittance(address rec, bytes32 passwd_hash, uint8 days_available, address own) public payable {
         require(rec != 0);
-        owner = msg.sender;
+        owner = own;
         reciever = rec;
         passwd = passwd_hash;
         created_date = now;
